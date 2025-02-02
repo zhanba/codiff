@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CancellationToken } from "../common/cancellation.js";
 import { MovedText } from "./linesDiffComputer.js";
 import { ITextModel } from "./model.js";
 import { DetailedLineRangeMapping } from "./rangeMapping.js";
@@ -19,8 +18,7 @@ export interface IDocumentDiffProvider {
   computeDiff(
     original: ITextModel,
     modified: ITextModel,
-    options: IDocumentDiffProviderOptions,
-    cancellationToken: CancellationToken,
+    options: IDocumentDiffProviderOptions
   ): Promise<IDocumentDiff>;
 }
 
