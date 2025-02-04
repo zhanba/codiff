@@ -13,7 +13,19 @@
 
 .header {
   flex: 0 0 40px;
-  align-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 8px;
 }
 
 .content {
