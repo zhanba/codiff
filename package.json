@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "pnpm --filter codiff-playground run dev",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
     "test": "vitest"

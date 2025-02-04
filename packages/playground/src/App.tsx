@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+import { languages } from "@codemirror/language-data";
+import "./App.css";
+import { linesDiffComputers } from "codiff";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [origin, setOrigin] = useState<string>("wewew");
+  const [modified, setModified] = useState<string>("fdfd");
+  const [diff, setDiff] = useState<string>();
+
+  useEffect(() => {
+    const result = linesDiffComputers
+      .getDefault()
+      .computeDiff(origin.split("\n"), modified.split("\n"), {
+        computeMoves: true,
+        ignoreTrimWhitespace: true,
+        maxComputationTimeMs: 100,
+      });
+    setDiff(JSON.stringify(result, undefined, 2));
+  }, [origin, modified]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="playground">
+      <div className="header">Codiff Playground</div>
+      <div className="content">
+        <div className="code">
+          <CodeMirror
+            value={origin}
+            onChange={(val) => setOrigin(val)}
+            theme={"dark"}
+            className="editor"
+            extensions={[
+              markdown({ base: markdownLanguage, codeLanguages: languages }),
+            ]}
+          />
+        </div>
+        <div className="code">
+          <CodeMirror
+            value={modified}
+            onChange={(val) => setModified(val)}
+            theme={"dark"}
+            className="editor"
+            extensions={[
+              markdown({ base: markdownLanguage, codeLanguages: languages }),
+            ]}
+          />
+        </div>
+        <div className="code">
+          <CodeMirror
+            value={diff}
+            theme={"dark"}
+            className="editor"
+            extensions={[
+              markdown({ base: markdownLanguage, codeLanguages: languages }),
+            ]}
+          />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <div className="footer">header</div>
+    </div>
+  );
 }
 
-export default App
+export default App;

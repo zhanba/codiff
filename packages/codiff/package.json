@@ -17,10 +17,12 @@
   "license": "MIT",
   "author": "zhanba",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf ./dist && npm run tsc",
-    "start": "npm run build && node ./dist/index.js"
+    "build": "rm -rf ./dist && npm run tsc"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.5"
   }
 }
