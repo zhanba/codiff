@@ -1,0 +1,26 @@
+{
+  "name": "codiff",
+  "version": "1.0.0",
+  "description": "diff algorithm of vscode",
+  "keywords": [
+    "diff",
+    "vscode"
+  ],
+  "homepage": "https://github.com/zhanba/codiff#readme",
+  "bugs": {
+    "url": "https://github.com/zhanba/codiff/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhanba/codiff.git"
+  },
+  "license": "MIT",
+  "author": "zhanba",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rm -rf ./dist && npm run tsc",
+    "start": "npm run build && node ./dist/index.js"
+  }
+}
