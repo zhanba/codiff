@@ -1,6 +1,6 @@
 {
   "name": "codiff",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "diff algorithm of vscode",
   "keywords": [
     "diff",
@@ -16,11 +16,11 @@
   },
   "license": "MIT",
   "author": "zhanba",
-  "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {
+    "prepublishOnly": "pnpm run build",
     "tsc": "tsc",
-    "build": "rm -rf ./dist && npm run tsc"
+    "build": "rm -rf ./dist && pnpm run tsc"
   },
   "devDependencies": {
     "vitest": "^3.0.5"
