@@ -12,12 +12,15 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "codiff": "workspace:*"
+    "codiff": "workspace:*",
+    "react-codemirror-merge": "^4.23.8",
+    "@codemirror/merge": "^6.8.0",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/language-data": "^6.5.1",
+    "@uiw/react-codemirror": "^4.23.8"
   },
   "devDependencies": {
-    "@codemirror/lang-markdown": "^6.3.2",
-    "@codemirror/language-data": "^6.5.1",
-    "@uiw/react-codemirror": "^4.23.8",
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",

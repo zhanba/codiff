@@ -39,6 +39,13 @@
 }
 
 .code {
+  flex: 3 1 200px;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.result {
   flex: 1 1 200px;
   height: 100%;
   width: 100%;
