@@ -1,123 +1,166 @@
-// Helper: generate a random integer between min and max inclusive
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+type CodePair = {
+  codeA: string;
+  codeB: string;
+};
 
-// Helper: list of sample words for generating code lines
-const sampleWords = [
-  "function",
-  "const",
-  "let",
-  "var",
-  "if",
-  "else",
-  "for",
-  "while",
-  "return",
-  "new",
-  "import",
-  "from",
-  "class",
-  "this",
-  "=>",
-  "break",
-  "continue",
-  "true",
-  "false",
-  "null",
-  "undefined",
-];
+const VAR_NAME_REGEX = /^var\d+$/;
+const NUMBER_REGEX = /^\d+$/;
+const STRING_REGEX = /^'[^']*'$/;
 
-// Helper: generate a random word from sampleWords
-function randomWord(): string {
-  return sampleWords[randomInt(0, sampleWords.length - 1)];
-}
-
-// Helper: generate a random code-like line
-function generateRandomLine(): string {
-  // Create a line with a random number of words (between 5 and 10)
-  const wordCount = randomInt(5, 10);
-  const words: string[] = [];
-  for (let i = 0; i < wordCount; i++) {
-    words.push(randomWord());
-  }
-  // Optionally, add a semicolon at the end to mimic a statement
-  return words.join(" ") + ";";
-}
-
-/**
- * Generates two similar JavaScript code snippets.
- *
- * @param maxLines - Maximum number of lines the base code will have.
- * @param maxDiff - Maximum number of diff operations to apply to the second snippet.
- *                  Each diff operation may be:
- *                    • Insertion: inserting a new randomly generated line.
- *                    • Deletion: deleting an existing line.
- *                    • Modification: replacing one word in a randomly selected line.
- *
- * @returns An object with properties code1 and code2 which are the two code snippets.
- */
-export function generateSimilarJsCode(
+export function generateSimilarCode(
   maxLines: number,
-  maxDiff: number
-): { code1: string; code2: string } {
-  // 1. Generate a base random code snippet with exactly maxLines lines.
-  const baseCodeLines: string[] = [];
-  for (let i = 0; i < maxLines; i++) {
-    baseCodeLines.push(generateRandomLine());
-  }
+  maxDiffs: number
+): CodePair {
+  // Generate base code
+  const codeA = generateBaseCode(maxLines);
+  const codeB = [...codeA];
+  let remainingDiffs = maxDiffs;
 
-  // Clone base code for the first snippet.
-  const code1Lines = [...baseCodeLines];
+  while (remainingDiffs > 0 && codeB.length > 0) {
+    const operation = randomOperation(codeB.length, maxLines);
 
-  // 2. Clone base code to generate code2, which we will modify.
-  const code2Lines = [...baseCodeLines];
+    switch (operation) {
+      case "insert":
+        codeB.splice(randomIndex(codeB.length + 1), 0, generateLine());
+        remainingDiffs--;
+        break;
 
-  // 3. Apply up to maxDiff random diff operations on code2.
-  // We perform a random number of diffs, not exceeding maxDiff.
-  const diffCount = randomInt(1, maxDiff);
-  for (let i = 0; i < diffCount; i++) {
-    // Choose a diff operation: 0 = insertion, 1 = deletion, 2 = word modification.
-    const op = randomInt(0, 2);
+      case "delete":
+        codeB.splice(randomIndex(codeB.length), 1);
+        remainingDiffs--;
+        break;
 
-    if (op === 0) {
-      // Insertion: insert a new randomly generated line at a random position.
-      const newLine = generateRandomLine();
-      const insertPos = randomInt(0, code2Lines.length);
-      code2Lines.splice(insertPos, 0, newLine);
-    } else if (op === 1) {
-      // Deletion: remove a random line if there's at least one line.
-      if (code2Lines.length > 0) {
-        const deletePos = randomInt(0, code2Lines.length - 1);
-        code2Lines.splice(deletePos, 1);
-      }
-    } else {
-      // Modification: change one random word in a random line.
-      if (code2Lines.length > 0) {
-        const lineIndex = randomInt(0, code2Lines.length - 1);
-        const line = code2Lines[lineIndex];
-        // Split the line into words (ignoring punctuation normally).
-        const words = line.replace(/;/g, "").split(" ");
-        if (words.length > 0) {
-          const wordIndex = randomInt(0, words.length - 1);
-          // Replace the word with another random word.
-          words[wordIndex] = randomWord();
-          // Rebuild the line and preserve the semicolon formatting.
-          code2Lines[lineIndex] =
-            words.join(" ") + (line.trim().endsWith(";") ? ";" : "");
+      case "modify": {
+        const idx = randomIndex(codeB.length);
+        const original = codeB[idx];
+        const modified = modifyLine(original);
+        if (modified !== original) {
+          codeB[idx] = modified;
+          remainingDiffs--;
         }
+        break;
       }
     }
   }
 
-  // 4. Join lines to form the two code strings.
-  const code1 = code1Lines.join("\n");
-  const code2 = code2Lines.join("\n");
-
-  return { code1, code2 };
+  return {
+    codeA: codeA.join("\n"),
+    codeB: codeB.join("\n"),
+  };
 }
 
-// Example usage:
-const { code1, code2 } = generateSimilarJsCode(10, 3);
-console.log("Code 1:\n", code1);
-console.log("\nCode 2:\n", code2);
+function generateBaseCode(lineCount: number): string[] {
+  return Array.from({ length: lineCount }, () => generateLine());
+}
+
+function generateLine(): string {
+  const generators = [
+    generateVariableDeclaration,
+    generateFunction,
+    generateArrowFunction,
+    generateForLoop,
+    generateIfStatement,
+    generateConsoleLog,
+    generateObjectLiteral,
+    generateAssignment,
+  ];
+  return generators[Math.floor(Math.random() * generators.length)]();
+}
+
+function generateVariableDeclaration(): string {
+  return `let var${Math.floor(Math.random() * 1000)} = ${generateValue()};`;
+}
+
+function generateFunction(): string {
+  const params = ["a", "b", "c"].slice(0, Math.floor(Math.random() * 3));
+  return `function func${Math.floor(Math.random() * 1000)}(${params.join(", ")}) { return ${params.join(" + ")} || 0; }`;
+}
+
+function generateArrowFunction(): string {
+  return `const fn${Math.floor(Math.random() * 1000)} = () => ${generateValue()};`;
+}
+
+function generateForLoop(): string {
+  const varName = `i${Math.floor(Math.random() * 1000)}`;
+  return `for (let ${varName} = 0; ${varName} < ${Math.floor(Math.random() * 10)}; ${varName}++) { /* loop */ }`;
+}
+
+function generateIfStatement(): string {
+  return `if (var${Math.floor(Math.random() * 1000)} > ${Math.floor(Math.random() * 50)}) { /* condition */ }`;
+}
+
+function generateConsoleLog(): string {
+  return `console.log('${Math.random().toString(36).substring(7)}');`;
+}
+
+function generateObjectLiteral(): string {
+  return `const obj${Math.floor(Math.random() * 1000)} = { prop: ${generateValue()} };`;
+}
+
+function generateAssignment(): string {
+  return `var${Math.floor(Math.random() * 1000)} = ${generateValue()};`;
+}
+
+function generateValue(): string {
+  const types = ["number", "string", "array", "object"];
+  switch (types[Math.floor(Math.random() * types.length)]) {
+    case "number":
+      return `${Math.floor(Math.random() * 100)}`;
+    case "string":
+      return `'${Math.random().toString(36).substring(7)}'`;
+    case "array":
+      return `[${Array.from({ length: 3 }, generateValue).join(", ")}]`;
+    case "object":
+      return `{ key: ${generateValue()} }`;
+    default:
+      return "null";
+  }
+}
+
+function modifyLine(line: string): string {
+  const tokens = line.split(/(\s+|\W)/).filter((t) => t.trim().length > 0);
+  const candidates = tokens
+    .map((t, i) => ({ t, i }))
+    .filter(({ t }) => isModifiable(t));
+
+  if (candidates.length === 0) return line;
+
+  const { t, i } = candidates[Math.floor(Math.random() * candidates.length)];
+  tokens[i] = modifyToken(t);
+  return tokens.join("");
+}
+
+function isModifiable(token: string): boolean {
+  return (
+    VAR_NAME_REGEX.test(token) ||
+    NUMBER_REGEX.test(token) ||
+    STRING_REGEX.test(token)
+  );
+}
+
+function modifyToken(token: string): string {
+  if (VAR_NAME_REGEX.test(token)) {
+    return `var${Math.floor(Math.random() * 1000)}`;
+  }
+  if (NUMBER_REGEX.test(token)) {
+    return `${Math.floor(Math.random() * 100)}`;
+  }
+  if (STRING_REGEX.test(token)) {
+    return `'${Math.random().toString(36).substring(7)}'`;
+  }
+  return token;
+}
+
+type Operation = "insert" | "delete" | "modify";
+
+function randomOperation(currentLines: number, maxLines: number): Operation {
+  const options: Operation[] = [];
+  if (currentLines < maxLines * 1.5) options.push("insert");
+  if (currentLines > Math.floor(maxLines / 2)) options.push("delete");
+  options.push("modify");
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+function randomIndex(max: number): number {
+  return Math.floor(Math.random() * max);
+}

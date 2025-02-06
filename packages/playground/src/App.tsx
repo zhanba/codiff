@@ -4,7 +4,7 @@ import "./App.css";
 import { linesDiffComputers } from "codiff";
 import { Change, Chunk } from "@codemirror/merge";
 import { Text } from "@codemirror/state";
-import { generateSimilarJsCode } from "./util";
+import { generateSimilarCode } from "./util";
 import CodeMirrorMerge from "react-codemirror-merge";
 import { json } from "@codemirror/lang-json";
 
@@ -20,11 +20,12 @@ Chunk.build = (a: Text, b: Text): readonly Chunk[] => {
       maxComputationTimeMs: 100,
     });
   return result.changes.map<Chunk>((item) => {
-    console.log("innner", item);
-
     const getPosition = (text: Text, from: number, to: number) => {
       if (from === to) {
         // no change
+        if (from === 1) {
+          return { from: text.line(from).to, to: text.line(from).to };
+        }
         return { from: text.line(from - 1).to, to: text.line(from - 1).to };
       }
       return { from: text.line(from).from, to: text.line(to - 1).to };
@@ -82,7 +83,6 @@ Chunk.build = (a: Text, b: Text): readonly Chunk[] => {
       modified.from,
       modified.to + 1
     );
-    console.log("chunks", chunk);
     return chunk;
   });
 };
@@ -101,8 +101,14 @@ function App() {
   const [diff, setDiff] = useState<string>();
   const [diffms, setDiffms] = useState<string>();
 
+  const [maxLine, setMaxLine] = useState(20);
+  const [maxDiff, setMaxDiff] = useState(10);
+
   const handleGenerate = () => {
-    const { code1: origin, code2: modified } = generateSimilarJsCode(30, 10);
+    const { codeA: origin, codeB: modified } = generateSimilarCode(
+      maxLine,
+      maxDiff
+    );
     setOrigin(origin);
     setModified(modified);
   };
@@ -126,7 +132,21 @@ function App() {
       <div className="header">
         <div>Codiff Playground</div>
         <div className="toolbar">
-          <button onClick={() => handleGenerate()}>Generate</button>
+          <button onClick={() => handleGenerate()}>Generate code</button>
+          <span>
+            maxLine:
+            <input
+              value={maxLine}
+              onChange={(e) => setMaxLine(parseInt(e.target.value))}
+            />
+          </span>
+          <span>
+            maxDiff:
+            <input
+              value={maxDiff}
+              onChange={(e) => setMaxDiff(parseInt(e.target.value))}
+            />
+          </span>
         </div>
       </div>
       <div className="content">
