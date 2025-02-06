@@ -5,7 +5,8 @@
   "description": "",
   "scripts": {
     "dev": "pnpm --filter codiff-playground run dev",
-    "build:playground": "pnpm --filter codiff-playground run build",
+    "build:playground": "pnpm run build && pnpm --filter codiff-playground run build",
+    "build": "pnpm --filter codiff run build",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
     "test": "vitest",
