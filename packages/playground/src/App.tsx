@@ -127,7 +127,6 @@ function App() {
         <div>Codiff Playground</div>
         <div className="toolbar">
           <button onClick={() => handleGenerate()}>Generate</button>
-          <div>time: {diffms} ms</div>
         </div>
       </div>
       <div className="content">
@@ -152,7 +151,26 @@ function App() {
           />
         </div>
       </div>
-      <div className="footer">header</div>
+      <div className="footer">
+        <div className="links">
+          <a href="https://github.com/zhanba/codiff" target="_blank">
+            codiff repo
+          </a>
+          <a
+            href="https://microsoft.github.io/monaco-editor/playground.html?source=v0.52.2#example-creating-the-diffeditor-hello-diff-world"
+            target="_blank"
+          >
+            monaco diff editor
+          </a>
+          <a
+            href="https://codemirror.net/try/#example=Merge%20View"
+            target="_blank"
+          >
+            codemirror merge editor
+          </a>
+        </div>
+        <div>diff used: {diffms} ms</div>
+      </div>
     </div>
   );
 }

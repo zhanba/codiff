@@ -36,6 +36,18 @@
 
 .footer {
   flex: 0 0 20px;
+  font-size: 10px;
+  padding: 0 12px;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.links {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .code {
