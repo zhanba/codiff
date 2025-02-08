@@ -22,7 +22,7 @@ export class MonotonousArray<T> {
         for (const item of this._array) {
           if (this._prevFindLastPredicate(item) && !predicate(item)) {
             throw new Error(
-              "MonotonousArray: current predicate must be weaker than (or equal to) the previous predicate."
+              "MonotonousArray: current predicate must be weaker than (or equal to) the previous predicate.",
             );
           }
         }
@@ -33,7 +33,7 @@ export class MonotonousArray<T> {
     const idx = findLastIdxMonotonous(
       this._array,
       predicate,
-      this._findLastMonotonousLastIdx
+      this._findLastMonotonousLastIdx,
     );
     this._findLastMonotonousLastIdx = idx + 1;
     return idx === -1 ? undefined : this._array[idx];
@@ -48,7 +48,7 @@ export class MonotonousArray<T> {
  */
 export function findLastMonotonous<T>(
   array: readonly T[],
-  predicate: (item: T) => boolean
+  predicate: (item: T) => boolean,
 ): T | undefined {
   const idx = findLastIdxMonotonous(array, predicate);
   return idx === -1 ? undefined : array[idx];
@@ -64,7 +64,7 @@ export function findLastIdxMonotonous<T>(
   array: readonly T[],
   predicate: (item: T) => boolean,
   startIdx = 0,
-  endIdxEx = array.length
+  endIdxEx = array.length,
 ): number {
   let i = startIdx;
   let j = endIdxEx;
@@ -89,7 +89,7 @@ export function findFirstIdxMonotonousOrArrLen<T>(
   array: readonly T[],
   predicate: (item: T) => boolean,
   startIdx = 0,
-  endIdxEx = array.length
+  endIdxEx = array.length,
 ): number {
   let i = startIdx;
   let j = endIdxEx;
@@ -112,7 +112,7 @@ export function findFirstIdxMonotonousOrArrLen<T>(
  */
 export function findFirstMonotonous<T>(
   array: readonly T[],
-  predicate: (item: T) => boolean
+  predicate: (item: T) => boolean,
 ): T | undefined {
   const idx = findFirstIdxMonotonousOrArrLen(array, predicate);
   return idx === array.length ? undefined : array[idx];

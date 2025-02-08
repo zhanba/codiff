@@ -38,7 +38,7 @@ export class DefaultDocumentDiffProvider implements IDocumentDiffProvider {
   async computeDiff(
     original: ITextModel,
     modified: ITextModel,
-    options: IDocumentDiffProviderOptions
+    options: IDocumentDiffProviderOptions,
   ): Promise<IDocumentDiff> {
     if (typeof this.diffAlgorithm !== "string") {
       return this.diffAlgorithm.computeDiff(original, modified, options);
@@ -63,9 +63,9 @@ export class DefaultDocumentDiffProvider implements IDocumentDiffProvider {
             [
               new RangeMapping(
                 original.getFullModelRange(),
-                modified.getFullModelRange()
+                modified.getFullModelRange(),
               ),
-            ]
+            ],
           ),
         ],
         identical: false,
@@ -91,7 +91,7 @@ export class DefaultDocumentDiffProvider implements IDocumentDiffProvider {
     const result = this.getDiffAlgorithm().computeDiff(
       original.getLinesContent(),
       modified.getLinesContent(),
-      options
+      options,
     );
 
     if (!result) {
@@ -101,7 +101,7 @@ export class DefaultDocumentDiffProvider implements IDocumentDiffProvider {
     // max 10 items in cache
     if (DefaultDocumentDiffProvider.diffCache.size > 10) {
       DefaultDocumentDiffProvider.diffCache.delete(
-        DefaultDocumentDiffProvider.diffCache.keys().next().value!
+        DefaultDocumentDiffProvider.diffCache.keys().next().value!,
       );
     }
 

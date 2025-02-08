@@ -20,7 +20,7 @@ export class MyersDiffAlgorithm implements IDiffAlgorithm {
   compute(
     seq1: ISequence,
     seq2: ISequence,
-    timeout: ITimeout = InfiniteTimeout.instance
+    timeout: ITimeout = InfiniteTimeout.instance,
   ): DiffAlgorithmResult {
     // These are common special cases.
     // The early return improves performance dramatically.
@@ -72,7 +72,7 @@ export class MyersDiffAlgorithm implements IDiffAlgorithm {
         step++;
         const x = Math.min(
           Math.max(maxXofDLineTop, maxXofDLineLeft),
-          seqX.length
+          seqX.length,
         );
         const y = x - k;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -88,7 +88,7 @@ export class MyersDiffAlgorithm implements IDiffAlgorithm {
           x === maxXofDLineTop ? paths.get(k + 1) : paths.get(k - 1);
         paths.set(
           k,
-          newMaxX !== x ? new SnakePath(lastPath, x, y, newMaxX - x) : lastPath
+          newMaxX !== x ? new SnakePath(lastPath, x, y, newMaxX - x) : lastPath,
         );
 
         if (V.get(k) === seqX.length && V.get(k) - k === seqY.length) {
@@ -110,8 +110,8 @@ export class MyersDiffAlgorithm implements IDiffAlgorithm {
         result.push(
           new SequenceDiff(
             new OffsetRange(endX, lastAligningPosS1),
-            new OffsetRange(endY, lastAligningPosS2)
-          )
+            new OffsetRange(endY, lastAligningPosS2),
+          ),
         );
       }
       if (!path) {
@@ -133,7 +133,7 @@ class SnakePath {
     public readonly prev: SnakePath | null,
     public readonly x: number,
     public readonly y: number,
-    public readonly length: number
+    public readonly length: number,
   ) {}
 }
 

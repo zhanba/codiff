@@ -9,7 +9,7 @@ const STRING_REGEX = /^'[^']*'$/;
 
 export function generateSimilarCode(
   maxLines: number,
-  maxDiffs: number
+  maxDiffs: number,
 ): CodePair {
   // Generate base code
   const codeA = generateBaseCode(maxLines);

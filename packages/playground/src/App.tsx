@@ -11,81 +11,92 @@ import { json } from "@codemirror/lang-json";
 const Original = CodeMirrorMerge.Original;
 const Modified = CodeMirrorMerge.Modified;
 
-Chunk.build = (a: Text, b: Text): readonly Chunk[] => {
-  const result = linesDiffComputers
-    .getDefault()
-    .computeDiff(a.toJSON(), b.toJSON(), {
-      computeMoves: true,
-      ignoreTrimWhitespace: true,
-      maxComputationTimeMs: 100,
-    });
-  return result.changes.map<Chunk>((item) => {
-    const getPosition = (text: Text, from: number, to: number) => {
-      if (from === to) {
-        // no change
-        if (from === 1) {
-          return { from: text.line(from).to, to: text.line(from).to };
+const overrideBuild = () => {
+  const buildChunks = (a: Text, b: Text): readonly Chunk[] => {
+    console.log("diff compute");
+    const result = linesDiffComputers
+      .getDefault()
+      .computeDiff(a.toJSON(), b.toJSON(), {
+        computeMoves: true,
+        ignoreTrimWhitespace: true,
+        maxComputationTimeMs: 100,
+      });
+    return result.changes.map<Chunk>((item) => {
+      const getPosition = (text: Text, from: number, to: number) => {
+        if (from === to) {
+          // no change
+          if (from === 1) {
+            return { from: text.line(from).to, to: text.line(from).to };
+          }
+          return { from: text.line(from - 1).to, to: text.line(from - 1).to };
         }
-        return { from: text.line(from - 1).to, to: text.line(from - 1).to };
-      }
-      return { from: text.line(from).from, to: text.line(to - 1).to };
-    };
-
-    const origin = getPosition(
-      a,
-      item.original.startLineNumber,
-      item.original.endLineNumberExclusive
-    );
-
-    const modified = getPosition(
-      b,
-      item.modified.startLineNumber,
-      item.modified.endLineNumberExclusive
-    );
-
-    const nonNegative = (a: number) => {
-      return a < 0 ? 0 : a;
-    };
-
-    const changes = (item.innerChanges ?? []).map<Change>((inner) => {
-      return {
-        fromA: nonNegative(
-          a.line(inner.originalRange.startLineNumber).from +
-            inner.originalRange.startColumn -
-            1 -
-            origin.from
-        ),
-        toA: nonNegative(
-          a.line(inner.originalRange.endLineNumber).from +
-            inner.originalRange.endColumn -
-            1 -
-            origin.from
-        ),
-        fromB: nonNegative(
-          b.line(inner.modifiedRange.startLineNumber).from +
-            inner.modifiedRange.startColumn -
-            1 -
-            modified.from
-        ),
-        toB: nonNegative(
-          b.line(inner.modifiedRange.endLineNumber).from +
-            inner.modifiedRange.endColumn -
-            1 -
-            modified.from
-        ),
+        return { from: text.line(from).from, to: text.line(to - 1).to };
       };
-    });
 
-    const chunk = new Chunk(
-      changes,
-      origin.from,
-      origin.to + 1,
-      modified.from,
-      modified.to + 1
-    );
-    return chunk;
-  });
+      const origin = getPosition(
+        a,
+        item.original.startLineNumber,
+        item.original.endLineNumberExclusive,
+      );
+
+      const modified = getPosition(
+        b,
+        item.modified.startLineNumber,
+        item.modified.endLineNumberExclusive,
+      );
+
+      const nonNegative = (a: number) => {
+        return a < 0 ? 0 : a;
+      };
+
+      const changes = (item.innerChanges ?? []).map<Change>((inner) => {
+        return {
+          fromA: nonNegative(
+            a.line(inner.originalRange.startLineNumber).from +
+              inner.originalRange.startColumn -
+              1 -
+              origin.from,
+          ),
+          toA: nonNegative(
+            a.line(inner.originalRange.endLineNumber).from +
+              inner.originalRange.endColumn -
+              1 -
+              origin.from,
+          ),
+          fromB: nonNegative(
+            b.line(inner.modifiedRange.startLineNumber).from +
+              inner.modifiedRange.startColumn -
+              1 -
+              modified.from,
+          ),
+          toB: nonNegative(
+            b.line(inner.modifiedRange.endLineNumber).from +
+              inner.modifiedRange.endColumn -
+              1 -
+              modified.from,
+          ),
+        };
+      });
+
+      const chunk = new Chunk(
+        changes,
+        origin.from,
+        origin.to + 1,
+        modified.from,
+        modified.to + 1,
+      );
+      return chunk;
+    });
+  };
+
+  Chunk.build = buildChunks;
+  Chunk.updateA = (chunks: readonly Chunk[], a: Text, b: Text) =>
+    buildChunks(a, b);
+  Chunk.updateB = (chunks: readonly Chunk[], a: Text, b: Text) =>
+    buildChunks(a, b);
 };
+
+overrideBuild();
 
 const doc = `one
 two
@@ -107,7 +118,7 @@ function App() {
   const handleGenerate = () => {
     const { codeA: origin, codeB: modified } = generateSimilarCode(
       maxLine,
-      maxDiff
+      maxDiff,
     );
     setOrigin(origin);
     setModified(modified);
@@ -151,15 +162,19 @@ function App() {
       </div>
       <div className="content">
         <div className="code">
-          <CodeMirrorMerge theme={"dark"}>
+          <CodeMirrorMerge theme={"dark"} destroyRerender={false}>
             <Original
               value={origin}
               onChange={(val) => {
-                console.log("origin change");
                 setOrigin(val);
               }}
+              key={origin}
             />
-            <Modified value={modified} onChange={(val) => setModified(val)} />
+            <Modified
+              key={modified}
+              value={modified}
+              onChange={(val) => setModified(val)}
+            />
           </CodeMirrorMerge>
         </div>
         <div className="result">

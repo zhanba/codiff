@@ -77,7 +77,7 @@ export const errorHandler = new ErrorHandler();
 
 /** @skipMangle */
 export function setUnexpectedErrorHandler(
-  newUnexpectedErrorHandler: (e: any) => void
+  newUnexpectedErrorHandler: (e: any) => void,
 ): void {
   errorHandler.setUnexpectedErrorHandler(newUnexpectedErrorHandler);
 }
@@ -250,7 +250,7 @@ export class ReadonlyError extends TypeError {
     super(
       name
         ? `${name} is read-only and cannot be changed`
-        : "Cannot change read-only property"
+        : "Cannot change read-only property",
     );
   }
 }

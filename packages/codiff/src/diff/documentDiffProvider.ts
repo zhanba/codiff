@@ -18,7 +18,7 @@ export interface IDocumentDiffProvider {
   computeDiff(
     original: ITextModel,
     modified: ITextModel,
-    options: IDocumentDiffProviderOptions
+    options: IDocumentDiffProviderOptions,
   ): Promise<IDocumentDiff>;
 }
 
