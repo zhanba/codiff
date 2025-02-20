@@ -1,3 +1,4 @@
+import { LRUCache } from "./common/cache";
 import { LineRange } from "./common/lineRange";
 import { Range } from "./common/range";
 import { splitLines } from "./common/strings";
@@ -14,26 +15,43 @@ export interface IDiffOptions extends IDocumentDiffProviderOptions {
   diffAlgorithm: DiffAlgorithmName;
 }
 
-export const defaultDiffOption: IDiffOptions = {
-  ignoreTrimWhitespace: true,
-  maxComputationTimeMs: 1000,
-  computeMoves: false,
-  extendToSubwords: false,
-  diffAlgorithm: "advanced",
-};
+export interface ICodiffOptions {
+  diffOptions: IDiffOptions;
+  cacheSize: number;
+}
 
 export class Codiff {
-  static maxCacheSize = 100;
-  private static readonly diffCache = new Map<string, IDocumentDiff>();
+  protected readonly defaultCacheSize = 100;
+  protected readonly defaultDiffOption: IDiffOptions = {
+    ignoreTrimWhitespace: true,
+    maxComputationTimeMs: 1000,
+    computeMoves: false,
+    extendToSubwords: false,
+    diffAlgorithm: "advanced",
+  };
+  private readonly diffCache: LRUCache<string, IDocumentDiff>;
+  private readonly options: ICodiffOptions;
 
-  protected getDiffAlgorithm(name?: DiffAlgorithmName) {
+  constructor(options?: Partial<ICodiffOptions>) {
+    this.options = {
+      diffOptions: this.defaultDiffOption,
+      cacheSize: this.defaultCacheSize,
+      ...options,
+    };
+
+    this.diffCache = new LRUCache<string, IDocumentDiff>(
+      this.options.cacheSize
+    );
+  }
+
+  private getDiffAlgorithm(name?: DiffAlgorithmName) {
     if (name === "legacy") {
       return linesDiffComputers.getLegacy();
     }
     return linesDiffComputers.getDefault();
   }
 
-  protected getFullRange(lines: string[]): Range {
+  private getFullRange(lines: string[]): Range {
     return new Range(
       1,
       1,
@@ -42,14 +60,18 @@ export class Codiff {
     );
   }
 
-  protected getDiffCacheKey(original: string, modified: string) {
-    return `${original}-codiff-cache-key-${modified}`;
+  protected getContentKey(content: string) {
+    return content;
+  }
+
+  private getDiffCacheKey(original: string, modified: string) {
+    return `${this.getContentKey(original)}-codiff-cache-key-${this.getContentKey(modified)}`;
   }
 
   computeDiff(
     original: string,
     modified: string,
-    options: IDiffOptions = defaultDiffOption
+    options?: Partial<IDiffOptions>
   ): IDocumentDiff {
     const originalLines = splitLines(original);
     const modifiedLines = splitLines(modified);
@@ -84,11 +106,17 @@ export class Codiff {
       };
     }
 
-    const diffAlgorithm = this.getDiffAlgorithm(options.diffAlgorithm);
+    const cacheKey = this.getDiffCacheKey(original, modified);
+    const cachedResult = this.diffCache.get(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+    const diffOptions = { ...this.options.diffOptions, ...options };
+    const diffAlgorithm = this.getDiffAlgorithm(diffOptions.diffAlgorithm);
     const result = diffAlgorithm.computeDiff(
       originalLines,
       modifiedLines,
-      options
+      diffOptions
     );
     const diffResult: IDocumentDiff = {
       changes: result.changes,
@@ -96,10 +124,7 @@ export class Codiff {
       identical: original === modified,
       moves: result.moves,
     };
-    if (Codiff.diffCache.size > Codiff.maxCacheSize) {
-      Codiff.diffCache.delete(Codiff.diffCache.keys().next().value!);
-    }
-    Codiff.diffCache.set(this.getDiffCacheKey(original, modified), diffResult);
+    this.diffCache.put(cacheKey, diffResult);
     return diffResult;
   }
 }
