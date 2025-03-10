@@ -21,13 +21,8 @@ five`;
 
 const docModified = doc.replace(/t/g, "T") + "\nSix";
 
-const diffResult = linesDiffComputers
-  .getDefault()
-  .computeDiff(doc, docModified, {
-    computeMoves: true,
-    ignoreTrimWhitespace: true,
-    maxComputationTimeMs: 100,
-  });
+const codiff = new Codiff();
+const result = codiff.computeDiff(doc, docmodified);
 ```
 
 diff result:
@@ -102,8 +97,9 @@ diff result:
       ]
     }
   ],
-  "moves": [],
-  "hitTimeout": false
+  "quitEarly": false,
+  "identical": false,
+  "moves": []
 }
 ```
 
