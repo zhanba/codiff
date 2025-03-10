@@ -1,0 +1,403 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Codiff > complex case snapshot 1`] = `
+[
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 5,
+      "startLineNumber": 2,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 2,
+      "startLineNumber": 2,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 9,
+      "startLineNumber": 8,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 5,
+      "startLineNumber": 5,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 17,
+      "startLineNumber": 11,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 10,
+      "startLineNumber": 7,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 19,
+      "startLineNumber": 18,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 12,
+      "startLineNumber": 11,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 22,
+      "startLineNumber": 20,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 15,
+      "startLineNumber": 13,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 25,
+      "startLineNumber": 24,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 17,
+      "startLineNumber": 17,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 26,
+      "startLineNumber": 26,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 19,
+      "startLineNumber": 18,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 30,
+      "startLineNumber": 28,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 24,
+      "startLineNumber": 21,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 32,
+      "startLineNumber": 32,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 27,
+      "startLineNumber": 26,
+    },
+  },
+]
+`;
+
+exports[`Codiff > snapshot 1`] = `
+[
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 5,
+      "startLineNumber": 2,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 2,
+      "startLineNumber": 2,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 9,
+      "startLineNumber": 8,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 5,
+      "startLineNumber": 5,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 17,
+      "startLineNumber": 11,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 10,
+      "startLineNumber": 7,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 19,
+      "startLineNumber": 18,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 12,
+      "startLineNumber": 11,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 22,
+      "startLineNumber": 20,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 15,
+      "startLineNumber": 13,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 25,
+      "startLineNumber": 24,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 17,
+      "startLineNumber": 17,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 26,
+      "startLineNumber": 26,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 19,
+      "startLineNumber": 18,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 30,
+      "startLineNumber": 28,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 24,
+      "startLineNumber": 21,
+    },
+  },
+  DetailedLineRangeMapping {
+    "innerChanges": [
+      RangeMapping {
+        "modifiedRange": [Circular],
+        "originalRange": [Circular],
+      },
+    ],
+    "modified": LineRange {
+      "endLineNumberExclusive": 32,
+      "startLineNumber": 32,
+    },
+    "original": LineRange {
+      "endLineNumberExclusive": 27,
+      "startLineNumber": 26,
+    },
+  },
+]
+`;
