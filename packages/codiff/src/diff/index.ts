@@ -1,5 +1,4 @@
 export * from "./documentDiffProvider.js";
-export * from "./defaultDocumentDiffProvider.js";
 export * from "./legacyLinesDiffComputer.js";
 export * from "./linesDiffComputer.js";
 export * from "./linesDiffComputers.js";

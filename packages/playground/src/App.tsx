@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import "./App.css";
-import { linesDiffComputers } from "codiff";
+import { Codiff } from "codiff";
 import { Change, Chunk } from "@codemirror/merge";
 import { Text } from "@codemirror/state";
 import { generateSimilarCode } from "./util";
@@ -11,16 +11,12 @@ import { json } from "@codemirror/lang-json";
 const Original = CodeMirrorMerge.Original;
 const Modified = CodeMirrorMerge.Modified;
 
+const codiff = new Codiff();
+
 const overrideBuild = () => {
   const buildChunks = (a: Text, b: Text): readonly Chunk[] => {
     console.log("diff compute");
-    const result = linesDiffComputers
-      .getDefault()
-      .computeDiff(a.toJSON(), b.toJSON(), {
-        computeMoves: true,
-        ignoreTrimWhitespace: true,
-        maxComputationTimeMs: 100,
-      });
+    const result = codiff.computeDiff(a.toString(), b.toString());
     return result.changes.map<Chunk>((item) => {
       const getPosition = (text: Text, from: number, to: number) => {
         if (from === to) {
@@ -36,13 +32,13 @@ const overrideBuild = () => {
       const origin = getPosition(
         a,
         item.original.startLineNumber,
-        item.original.endLineNumberExclusive,
+        item.original.endLineNumberExclusive
       );
 
       const modified = getPosition(
         b,
         item.modified.startLineNumber,
-        item.modified.endLineNumberExclusive,
+        item.modified.endLineNumberExclusive
       );
 
       const nonNegative = (a: number) => {
@@ -55,25 +51,25 @@ const overrideBuild = () => {
             a.line(inner.originalRange.startLineNumber).from +
               inner.originalRange.startColumn -
               1 -
-              origin.from,
+              origin.from
           ),
           toA: nonNegative(
             a.line(inner.originalRange.endLineNumber).from +
               inner.originalRange.endColumn -
               1 -
-              origin.from,
+              origin.from
           ),
           fromB: nonNegative(
             b.line(inner.modifiedRange.startLineNumber).from +
               inner.modifiedRange.startColumn -
               1 -
-              modified.from,
+              modified.from
           ),
           toB: nonNegative(
             b.line(inner.modifiedRange.endLineNumber).from +
               inner.modifiedRange.endColumn -
               1 -
-              modified.from,
+              modified.from
           ),
         };
       });
@@ -83,7 +79,7 @@ const overrideBuild = () => {
         origin.from,
         origin.to + 1,
         modified.from,
-        modified.to + 1,
+        modified.to + 1
       );
       return chunk;
     });
@@ -118,7 +114,7 @@ function App() {
   const handleGenerate = () => {
     const { codeA: origin, codeB: modified } = generateSimilarCode(
       maxLine,
-      maxDiff,
+      maxDiff
     );
     setOrigin(origin);
     setModified(modified);
@@ -126,13 +122,7 @@ function App() {
 
   useEffect(() => {
     const start = performance.now();
-    const result = linesDiffComputers
-      .getDefault()
-      .computeDiff(origin.split("\n"), modified.split("\n"), {
-        computeMoves: true,
-        ignoreTrimWhitespace: true,
-        maxComputationTimeMs: 100,
-      });
+    const result = codiff.computeDiff(origin, modified);
     const end = performance.now();
     setDiffms((end - start).toFixed(3));
     setDiff(JSON.stringify(result, undefined, 2));
