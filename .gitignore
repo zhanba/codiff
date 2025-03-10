@@ -1,3 +1,21 @@
-node_modules
-src/**/*.js
+# Clacky-related configuration
+.1024*
+!.1024
+.breakpoints
+
+# TypeScript/JavaScript specific ignores
+*.tsbuildinfo
+.eslintcache
+*.js.map
+.npm
+
+# Build output directories
+.cache/
+build/
+coverage/
 dist
+
+# Package manager related ignores
+node_modules
+.pnpm-store
+src/**/*.js
